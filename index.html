@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>sigma.js</title>
+
+		<meta name="description" content="An unnamed presentation about sigma.js">
+		<meta name="author" content="Alexis Jacomy">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+  	<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    <link href="css/font-awesome.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/fosdem2013.css">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h1 style="letter-spacing: -0.05em;" class="sigma lowercase">sigma.js</h1>
+
+					<p>
+						<small><a href="https://fosdem.org/2013/">FOSDEM 2013</a> / <a href="http://fosdem.graph-database.org/">GraphDevRoom</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Who I am</h2>
+
+					<p>
+						<a href="http://github.com/jacomyal">Alexis Jacomy</a> / <a href="http://twitter.com/jacomyal">@jacomyal</a>
+					</p>
+
+					<p>
+						front-end engineer <a href="http://labs.linkfluence.net">@linkfluence</a>, Paris
+					</p>
+
+					<p>
+						#opensource #javascript #dataviz
+					</p>
+				</section>
+
+				<section>
+					<section>
+						<h2>Why visualizing networks matters</h2>
+					</section>
+
+					<section>
+						<blockquote cite="http://warriors.eecs.umich.edu/viz_tools/">
+							[...] A well-designed visualization tool can allow the user to see structure in a graphed data set that is difficult or impossible to see in its raw form.
+						</blockquote>
+
+						<p class="right">
+							<small><a href="http://warriors.eecs.umich.edu/viz_tools/">(source)</a></small>
+						</p>
+					</section>
+
+					<section>
+						<p>
+							Also...
+						</p>
+						<p class="fragment">
+							<a href="http://gephi.org">Gephi</a> made it <em>deadly simple and funny</em> to visualize graphs.
+						</p>
+
+						<p class="fragment">
+							People from different fields use it to display, analyze and play with different kind of data...
+						</p>
+
+						<p class="fragment">
+							There is a real need for something more. People play with graphs, they might like more tools to share them.
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h3>What to expect from a Web graph visualization tool?</h3>
+					</section>
+
+					<section>
+						<h2>Interactive</h2>
+						<p class="fragment">In the era of Web apps, static representations might look old-fashioned.</p>
+					</section>
+
+					<section>
+						<h2>Scalable</h2>
+						<p class="fragment">If the browser freezes, the user leaves.</p>
+						<p class="fragment"><em>(just, it's not about millions of vertices, here...)</em></p>
+					</section>
+
+					<section>
+						<h2>Cross-devices</h2>
+						<p class="fragment">Mobiles, tablets offer new way to explore data.</p>
+					</section>
+
+					<section>
+						<h2>Customizable</h2>
+						<p class="fragment">To make it possible to adapt the graphics to your case.</p>
+					</section>
+
+					<section>
+						<h2>Eye-friendly</h2>
+						<p class="fragment">Because it's always better when it's nice to the eye.</p>
+					</section>
+
+					<section>
+						<p>...and obviously</p>
+						<h2 class="fragment">Open-Source</h2>
+					</section>
+				</section>
+
+				<section>
+					<h2>And here comes <span class="sigma lowercase">sigma.js</span> !</h2>
+
+          <ul>
+            <li class="fragment">Interactive (with API methods and events)</li>
+            <li class="fragment">Scalable (frames injection, no freezing)</li>
+            <li class="fragment">Cross-devices (no Flash, just <a href="http://caniuse.com/canvas">canvas elements</a>)</li>
+            <li class="fragment">Customizable (many settable properties)</li>
+            <li class="fragment">Eye-friendly (let's wait for the examples...)</li>
+            <li class="fragment">Open-Source (released under the <a href="https://raw.github.com/jacomyal/sigma.js/master/LICENSE.txt">MIT License</a>)</li>
+          </ul>
+				</section>
+
+				<section>
+					<section>
+						<h2>But first, a "real life" case</h2>
+					</section>
+
+					<section>
+						<h2><a href="http://moviegalaxies.com/">Movie Galaxies</a></h2>
+	          <a class="image" href="http://moviegalaxies.com/movies/178-Casino" target="_blank">
+	            <img src="img/moviegalaxies.png" alt="MovieGalaxies - Casino (1995)">
+	          </a>
+					</section>
+
+					<section>
+						<h2><a href="http://moviegalaxies.com/">Movie Galaxies</a></h2>
+						<p>
+							Graphs built from the characters cooccurences in movies scripts.
+						</p>
+					</section>
+
+					<section>
+						<h3>
+							<a href="http://moviegalaxies.com/" target="_blank">Demo</a>
+						</h3>
+					</section>
+				</section>
+
+				<section>
+					<h2>Time to show some code</h2>
+				</section>
+
+				<section>
+					<section>
+						<h2>First example: Basics</h2>
+					</section>
+
+					<section>
+						<h3>Here is the graph to display</h3>
+          	<pre><code>var graph = {
+  nodes: {
+    n1: { label: 'Node 1', x: 0, y: 0, size: 10 },
+    n2: { label: 'Node 2', x: 1, y: 1, size: 20 },
+    n3: { label: 'Node 3', x: -1, y: -1, size: 30 }
+  },
+  edges: {
+    e1: { source: 'n1', target: 'n2' },
+    e2: { source: 'n1', target: 'n3' }
+  }
+};</code></pre>
+					</section>
+
+					<section>
+						<h2>And the DOM container</h2>
+          	<pre><code>&lt;!-- [...] --&gt;
+&lt;script src="js/sigma.min.js"&gt;&lt;/script&gt;
+&lt;div id="sigma-container" style="width: 100px; height: 100px;" /&gt;
+&lt;!-- [...] --&gt;</code></pre>
+					</section>
+
+					<section>
+						<h2>Finally, let's instanciate <span class="sigma lowercase">sigma</span></h2>
+          	<pre><code>var k;
+var s = sigma.init(
+  document.getElementById('sigma-container')
+);
+
+for (k in graph.nodes)
+  s.addNode(k, graph.nodes[k]);
+
+for (k in graph.edges)
+  s.addEdge(
+    k,
+    graph.edges[k].source,
+    graph.edges[k].target,
+    graph.edges[k]
+  );
+
+s.draw();</code></pre>
+					</section>
+
+					<section data-state="show-sigma-1">
+						<h2>And the result:</h2>
+						<div class="sigma-sample sigma-container" id="sigma-1"></div>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Second example: A bit advanced</h2>
+					</section>
+
+					<section>
+						<h3>The graph</h3>
+						<p class="fragment">
+							We generate it by creating <code>N</code> nodes grouped in <code>C</code> groups.
+						</p>
+						<p class="fragment">
+							Then, we add <code>E</code> edges. Each edge has a <code>P</code> probability to link two nodes in the same clusters.
+						</p>
+						<p class="fragment">
+							To make it graphically observable, nodes from the same group have the same color.
+						</p>
+					</section>
+
+					<section>
+						<h3>The HTML</h3>
+          	<pre><code>&lt;!-- [...] --&gt;
+&lt;script src="js/sigma.min.js"&gt;&lt;/script&gt;
+&lt;script src="js/sigma.forceatlas2.js"&gt;&lt;/script&gt;
+&lt;div id="sigma-container" style="width: 100px; height: 100px;" /&gt;
+&lt;!-- [...] --&gt;</code></pre>
+					</section>
+
+					<section>
+						<h2>The JavaScript</h2>
+          	<pre><code>var k;
+var s = sigma.init(
+  document.getElementById('sigma-container')
+);
+
+for (k in graph.nodes)
+  s.addNode(k, graph.nodes[k]);
+
+for (k in graph.edges)
+  s.addEdge(
+    k,
+    graph.edges[k].source,
+    graph.edges[k].target,
+    graph.edges[k]
+  );
+
+s.startForceAtlas2();</code></pre>
+					</section>
+
+					<section data-state="show-sigma-2">
+						<h2>And the result:</h2>
+						<div class="sigma-sample sigma-container" id="sigma-2"></div>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Third example: Interface</h2>
+					</section>
+
+					<section>
+						<h3>The graph</h3>
+						<p class="fragment">
+							We keep the one from the last example, with the layout applied.
+						</p>
+					</section>
+
+					<section>
+						<h3>The interface</h3>
+						<p class="fragment">
+							We add buttons to move the graph, zoom in and out, and return to the original position.
+						</p>
+						<p class="fragment">
+							Buttons look like:
+          		<pre class="fragment"><code>&lt;!-- [...] --&gt;
+&lt;div class="icon move-icon" tabindex="0" data-action="up" title="Move up"&gt;
+  &lt;div class="icon-arrow-up"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- [...] --&gt;</code></pre>
+						</p>
+					</section>
+
+					<section>
+						<h3>The JavaScript</h3>
+						<p class="fragment">
+							We still have to bind those buttons. Here is one example:
+						</p>
+        		<pre class="fragment"><code>$('[data-action="up"]').bind('click', function(e) {
+  // With "inst" our sigma instance:
+  var newPos = inst.position();
+
+  newPos.stageY += 80;
+  inst.goTo(newPos.stageX, newPos.stageY);
+
+  e.stopPropagation();
+  return false;
+});</code></pre>
+					</section>
+					
+					<section data-state="show-sigma-3">
+						<h2>And the result:</h2>
+						<div class="sigma-sample">
+							<div class="sigma-container" id="sigma-3"></div>
+
+							<div class="buttons">
+		            <div class="move">
+		              <div class="icon move-icon" tabindex="0" data-action="up" title="Move up">
+		                <div class="icon-arrow-up"></div>
+		              </div>
+		              <div class="icon move-icon" tabindex="0" data-action="left" title="Move left">
+		                <div class="icon-arrow-left"></div>
+		              </div>
+		              <div class="icon move-icon" tabindex="0" data-action="right" title="Move right">
+		                <div class="icon-arrow-right"></div>
+		              </div>
+		              <div class="icon move-icon" tabindex="0" data-action="down" title="Move down">
+		                <div class="icon-arrow-down"></div>
+		              </div>
+		            </div>
+		            <div class="zoom">
+		              <div class="icon zoom-icon" tabindex="0" data-action="out" title="Zoom out">
+		                <div class="icon-zoom-out"></div>
+		              </div>
+		              <div class="icon refresh-icon" tabindex="0" data-action="refresh" title="Reset graph position">
+		                <div class="icon-resize-full"></div>
+		              </div>
+		              <div class="icon zoom-icon" tabindex="0" data-action="in" title="Zoom in">
+		                <div class="icon-zoom-in"></div>
+		              </div>
+		            </div>
+	            </div>
+						</div>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>And finally, people using <span class="sigma lowercase">sigma.js</span></h2>
+					</section>
+
+					<section>
+						<h4><a href="http://geeksta.net/">Ramiro Gómez</a></h4>
+						<p>
+							Programming languages influence network
+						</p>
+	          <a class="image" href="http://exploringdata.github.com/vis/programming-languages-influence-network/" target="_blank">
+	            <img src="img/languages.png" alt="Programming languages influence network">
+	          </a>
+					</section>
+
+					<section>
+						<h4><a href="http://www.matthieu-totet.fr/Main/">Matthieu Totet</a></h4>
+						<p>
+							Paris Metro & RER network
+						</p>
+	          <a class="image" href="http://www.matthieu-totet.fr/NextStop/Paris/" target="_blank">
+	            <img src="img/paris.png" alt="Programming languages influence network">
+	          </a>
+					</section>
+
+					<section>
+						<h4><a href="http://noduslabs.com/">Dmitry Paranyushkin - Nodus Labs</a></h4>
+						<p>
+							Network visualization of a Russian internet marketing community
+						</p>
+	          <a class="image" href="http://noduslabs.com/socialplayer/smmrussia/" target="_blank">
+	            <img src="img/russian.png" alt="Network visualization of a Russian internet marketing community">
+	          </a>
+					</section>
+
+					<section>
+						<h4><a href="http://linkurio.us/">Sébastien Heymann - Linkurious</a></h4>
+						<p>
+							Graph databases exploration
+						</p>
+	          <a class="image" href="http://linkurio.us/" target="_blank">
+	            <img src="img/linkurious.png" alt="Graph databases exploration">
+	          </a>
+					</section>
+
+					<section>
+						<h4><a href="http://greenpeace.fr/">GreenPeace France</a></h4>
+						<p>
+							Facenuke - French nuclear actors influence network
+						</p>
+	          <a class="image" href="http://greenpeace.fr/facenuke/" target="_blank">
+	            <img src="img/facenuke.png" alt="Facenuke">
+	          </a>
+					</section>
+
+					<section>
+						<h4><a href="http://www.medialab.sciences-po.fr/">Sciences-Po Paris - Médialab</a></h4>
+						<p>
+							Websites hypertext network about 2012 French presidential elections
+						</p>
+	          <a class="image" href="http://bibliotheque.sciences-po.fr/statique/elections-2012/carto.php" target="_blank">
+	            <img src="img/elections.png" alt="2012 French presidential elections">
+	          </a>
+					</section>
+
+					<section>
+						<h4><a href="http://www.oii.ox.ac.uk/people/?id=140">Bernie Hogan - University of Oxford</a></h4>
+						<p>
+							NameGenDev - Your ego-centered Facebook network visualized
+						</p>
+	          <a class="image" href="https://apps.facebook.com/namegendev/" target="_blank">
+	            <img src="img/namegendev.png" alt="NameGenDev">
+	          </a>
+					</section>
+
+					<!-- TODO! -->
+				</section>
+
+				<section>
+					<h2>Questions?</h2>
+				</section>
+
+				<section>
+					<h2>Thanks!</h2>
+					<p class="fragment">
+						<em>(slides made with <a href="http://hakim.se/projects/reveal-js">reveal.js</a>)</em>
+					</p>
+					<p>
+						<a href="http://sigmajs.org">sigmajs.org</a>
+					</p>
+					<p>
+						<a href="http://twitter.com/sigmajs">sigma.js on twitter</a>
+					</p>
+					<p>
+						<a href="http://github.com/jacomyal/sigma.js">sigma.js on github</a>
+					</p>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script src="js/jquery.min.js"></script>
+		<script src="js/sigma.min.js"></script>
+		<script src="js/sigma.forceatlas2.js"></script>
+
+		<script src="js/actions.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'sky', // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
